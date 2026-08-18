@@ -1,0 +1,5 @@
+BASE_URL = "https://qa-scooter.praktikum-services.ru"
+API_PREFIX = "/api/v1"
+COURIER_ENDPOINT = f"{API_PREFIX}/courier"
+LOGIN_ENDPOINT = f"{API_PREFIX}/courier/login"
+ORDERS_ENDPOINT = f"{API_PREFIX}/orders"
