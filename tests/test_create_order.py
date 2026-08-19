@@ -18,6 +18,7 @@ class TestOrderCreation:
     ])
     def test_create_order_with_colors(self, client, color):
         payload = get_order_payload(color=color)
-        response = client.post(ORDERS_ENDPOINT, json=payload)
+        with allure.step("Создание заказа"):
+            response = client.post(ORDERS_ENDPOINT, json=payload)
         assert response.status_code == 201, f"Ожидался код 201, получен {response.status_code}, тело: {response.text}"
         assert "track" in response.json(), "В ответе отсутствует поле track"

@@ -14,7 +14,8 @@ class TestCourierLogin:
             "login": registered_courier["login"],
             "password": registered_courier["password"]
         }
-        response = client.post(LOGIN_ENDPOINT, json=login_payload)
+        with allure.step("Авторизация курьера"):
+            response = client.post(LOGIN_ENDPOINT, json=login_payload)
         assert response.status_code == 200, f"Ожидался код 200, получен {response.status_code}, тело: {response.text}"
         assert "id" in response.json(), "В ответе отсутствует поле id"
 
@@ -27,7 +28,8 @@ class TestCourierLogin:
             "password": registered_courier["password"]
         }
         login_payload[wrong_field] = "wrong_" + login_payload[wrong_field]
-        response = client.post(LOGIN_ENDPOINT, json=login_payload)
+        with allure.step(f"Авторизация с неверным {wrong_field}"):
+            response = client.post(LOGIN_ENDPOINT, json=login_payload)
         assert response.status_code == 404, f"Ожидался код 404, получен {response.status_code}, тело: {response.text}"
         assert "Учетная запись не найдена" in response.text
 
@@ -38,7 +40,8 @@ class TestCourierLogin:
             "login": "nonexistent_login_12345",
             "password": "nonexistent_password"
         }
-        response = client.post(LOGIN_ENDPOINT, json=login_payload)
+        with allure.step("Авторизация с несуществующим пользователем"):
+            response = client.post(LOGIN_ENDPOINT, json=login_payload)
         assert response.status_code == 404, f"Ожидался код 404, получен {response.status_code}, тело: {response.text}"
         assert "Учетная запись не найдена" in response.text
 
@@ -51,5 +54,6 @@ class TestCourierLogin:
             "password": registered_courier["password"]
         }
         login_payload.pop(missing_field)
-        response = client.post(LOGIN_ENDPOINT, json=login_payload)
+        with allure.step(f"Авторизация без поля {missing_field}"):
+            response = client.post(LOGIN_ENDPOINT, json=login_payload)
         assert response.status_code >= 400, f"Ожидался код ошибки (>=400), получен {response.status_code}, тело: {response.text}"
